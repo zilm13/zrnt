@@ -3,8 +3,8 @@ package proto
 import (
 	"context"
 	"fmt"
-	"github.com/protolambda/zrnt/eth2/forkchoice"
-	"github.com/protolambda/zrnt/eth2/forkchoice/internal/fctest"
+	"github.com/zilm13/zrnt/eth2/forkchoice"
+	"github.com/zilm13/zrnt/eth2/forkchoice/internal/fctest"
 	"testing"
 )
 

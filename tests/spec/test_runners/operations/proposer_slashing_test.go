@@ -1,9 +1,9 @@
 package operations
 
 import (
-	"github.com/protolambda/zrnt/eth2/beacon/common"
-	"github.com/protolambda/zrnt/eth2/beacon/phase0"
-	"github.com/protolambda/zrnt/tests/spec/test_util"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
+	"github.com/zilm13/zrnt/eth2/beacon/phase0"
+	"github.com/zilm13/zrnt/tests/spec/test_util"
 	"testing"
 )
 

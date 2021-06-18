@@ -2,8 +2,8 @@ package fctest
 
 import (
 	"encoding/binary"
-	"github.com/protolambda/zrnt/eth2/configs"
-	"github.com/protolambda/zrnt/eth2/forkchoice"
+	"github.com/zilm13/zrnt/eth2/configs"
+	"github.com/zilm13/zrnt/eth2/forkchoice"
 )
 
 func LighthouseTestDef() *ForkChoiceTestDef {

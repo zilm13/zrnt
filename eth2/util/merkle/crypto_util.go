@@ -1,7 +1,7 @@
 package merkle
 
 import (
-	"github.com/protolambda/zrnt/eth2/util/hashing"
+	"github.com/zilm13/zrnt/eth2/util/hashing"
 	"github.com/protolambda/ztyp/tree"
 )
 

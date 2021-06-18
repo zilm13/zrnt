@@ -1,7 +1,7 @@
 package test_util
 
 import (
-	"github.com/protolambda/zrnt/eth2/util/bls"
+	"github.com/zilm13/zrnt/eth2/util/bls"
 	"gopkg.in/yaml.v3"
 	"testing"
 )

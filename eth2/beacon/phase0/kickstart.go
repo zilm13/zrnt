@@ -3,7 +3,7 @@ package phase0
 import (
 	"errors"
 	hbls "github.com/herumi/bls-eth-go-binary/bls"
-	"github.com/protolambda/zrnt/eth2/beacon/common"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
 )
 
 type KickstartValidatorData struct {

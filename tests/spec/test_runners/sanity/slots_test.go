@@ -2,8 +2,8 @@ package sanity
 
 import (
 	"context"
-	"github.com/protolambda/zrnt/eth2/beacon/common"
-	"github.com/protolambda/zrnt/tests/spec/test_util"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
+	"github.com/zilm13/zrnt/tests/spec/test_util"
 	"gopkg.in/yaml.v3"
 	"testing"
 )

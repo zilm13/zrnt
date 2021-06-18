@@ -2,7 +2,7 @@ package phase0
 
 import (
 	"context"
-	"github.com/protolambda/zrnt/eth2/beacon/common"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
 )
 
 type JustificationStakeData struct {

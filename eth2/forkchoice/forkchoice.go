@@ -3,7 +3,7 @@ package forkchoice
 import (
 	"context"
 	"fmt"
-	"github.com/protolambda/zrnt/eth2/beacon/common"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
 	"sync"
 )
 
