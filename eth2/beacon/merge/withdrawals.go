@@ -2,11 +2,17 @@ package merge
 
 import (
 	"fmt"
-	"github.com/zilm13/zrnt/eth2/beacon/common"
 	"github.com/protolambda/ztyp/codec"
 	"github.com/protolambda/ztyp/tree"
 	. "github.com/protolambda/ztyp/view"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
 )
+
+type Root = tree.Root
+
+type Bytes32 = Root
+
+const Bytes32Type = RootType
 
 const (
 	// TODO: pass REGISTRY_LIMIT from yaml
@@ -71,11 +77,11 @@ func (s *Withdrawal) Serialize(w *codec.EncodingWriter) error {
 }
 
 func (s *Withdrawal) ByteLength() uint64 {
-	return ExecutionPayloadHeaderType.TypeByteLength()
+	return WithdrawalType.TypeByteLength()
 }
 
 func (b *Withdrawal) FixedLength() uint64 {
-	return ExecutionPayloadHeaderType.TypeByteLength()
+	return WithdrawalType.TypeByteLength()
 }
 
 func (s *Withdrawal) HashTreeRoot(hFn tree.HashFn) common.Root {
