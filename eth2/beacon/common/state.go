@@ -3,6 +3,7 @@ package common
 import (
 	"context"
 	"github.com/protolambda/ztyp/tree"
+	"github.com/protolambda/ztyp/view"
 )
 
 type BatchRoots interface {
@@ -77,9 +78,12 @@ type Slashings interface {
 type ForkSettings struct {
 	MinSlashingPenaltyQuotient     uint64
 	ProportionalSlashingMultiplier uint64
+	CalcProposerShare              func(whistleblowerReward Gwei) Gwei
 }
 
 type BeaconState interface {
+	view.View
+
 	GenesisTime() (Timestamp, error)
 	SetGenesisTime(t Timestamp) error
 	GenesisValidatorsRoot() (Root, error)
@@ -122,7 +126,7 @@ type BeaconState interface {
 	SetFinalizedCheckpoint(c Checkpoint) error
 
 	HashTreeRoot(fn tree.HashFn) Root
-	Copy() (BeaconState, error)
+	CopyState() (BeaconState, error)
 
 	ForkSettings(spec *Spec) *ForkSettings
 
@@ -131,4 +135,18 @@ type BeaconState interface {
 	// ProcessBlock applies a block to the state.
 	// Excludes slot processing and signature validation. Just applies the block as-is. Error if mismatching slot.
 	ProcessBlock(ctx context.Context, spec *Spec, epc *EpochsContext, benv *BeaconBlockEnvelope) error
+}
+
+type UpgradeableBeaconState interface {
+	BeaconState
+
+	// Called whenever the state may need to upgrade to a next fork, changes the BeaconState interface contents if so.
+	UpgradeMaybe(ctx context.Context, spec *Spec, epc *EpochsContext) error
+}
+
+type SyncCommitteeBeaconState interface {
+	BeaconState
+	CurrentSyncCommittee() (*SyncCommitteeView, error)
+	NextSyncCommittee() (*SyncCommitteeView, error)
+	RotateSyncCommittee(next *SyncCommitteeView) error
 }

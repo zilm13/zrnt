@@ -56,10 +56,32 @@ func (d *DepositData) MessageRoot() Root {
 	return d.ToMessage().HashTreeRoot(tree.GetHashFn())
 }
 
+var DepositMessageType = ContainerType("DepositMessage", []FieldDef{
+	{"pubkey", BLSPubkeyType},
+	{"withdrawal_credentials", Bytes32Type},
+	{"amount", GweiType},
+})
+
 type DepositMessage struct {
 	Pubkey                BLSPubkey `json:"pubkey" yaml:"pubkey"`
 	WithdrawalCredentials Root      `json:"withdrawal_credentials" yaml:"withdrawal_credentials"`
 	Amount                Gwei      `json:"amount" yaml:"amount"`
+}
+
+func (d *DepositMessage) Deserialize(dr *codec.DecodingReader) error {
+	return dr.FixedLenContainer(&d.Pubkey, &d.WithdrawalCredentials, &d.Amount)
+}
+
+func (d *DepositMessage) Serialize(w *codec.EncodingWriter) error {
+	return w.FixedLenContainer(&d.Pubkey, &d.WithdrawalCredentials, &d.Amount)
+}
+
+func (a *DepositMessage) ByteLength() uint64 {
+	return 48 + 32 + 8
+}
+
+func (a *DepositMessage) FixedLength() uint64 {
+	return 48 + 32 + 8
 }
 
 func (b *DepositMessage) HashTreeRoot(hFn tree.HashFn) Root {

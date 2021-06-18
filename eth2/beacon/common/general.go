@@ -9,6 +9,8 @@ import (
 
 type Root = tree.Root
 
+type Bytes32 = Root
+
 const Bytes32Type = RootType
 
 type Shard Uint64View
@@ -46,6 +48,11 @@ func (e Shard) String() string {
 }
 
 const ShardType = Uint64Type
+
+func AsShard(v View, err error) (Shard, error) {
+	i, err := AsUint64(v, err)
+	return Shard(i), err
+}
 
 type CommitteeIndex Uint64View
 
@@ -169,7 +176,7 @@ var CheckpointType = ContainerType("Checkpoint", []FieldDef{
 	{"root", RootType},
 })
 
-func (c *Phase0Config) CheckPoint() *ContainerTypeDef {
+func (c *Phase0Preset) CheckPoint() *ContainerTypeDef {
 	return ContainerType("Checkpoint", []FieldDef{
 		{"epoch", EpochType},
 		{"root", RootType},

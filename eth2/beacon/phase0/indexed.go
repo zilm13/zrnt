@@ -109,7 +109,7 @@ func ValidateIndexedAttestationSignature(spec *common.Spec, dom common.BLSDomain
 		return errors.New("in phase 0 no empty attestation signatures are allowed")
 	}
 
-	if !bls.FastAggregateVerify(pubkeys,
+	if !bls.Eth2FastAggregateVerify(pubkeys,
 		common.ComputeSigningRoot(indexedAttestation.Data.HashTreeRoot(tree.GetHashFn()), dom),
 		indexedAttestation.Signature,
 	) {
@@ -123,7 +123,7 @@ func ValidateIndexedAttestation(spec *common.Spec, epc *common.EpochsContext, st
 	if err := ValidateIndexedAttestationNoSignature(spec, state, indexedAttestation); err != nil {
 		return err
 	}
-	dom, err := common.GetDomain(state, spec.DOMAIN_BEACON_ATTESTER, indexedAttestation.Data.Target.Epoch)
+	dom, err := common.GetDomain(state, common.DOMAIN_BEACON_ATTESTER, indexedAttestation.Data.Target.Epoch)
 	if err != nil {
 		return err
 	}

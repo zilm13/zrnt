@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/zilm13/zrnt/eth2/beacon"
 	"github.com/zilm13/zrnt/eth2/beacon/common"
 	"github.com/zilm13/zrnt/eth2/beacon/phase0"
 	"github.com/zilm13/zrnt/eth2/forkchoice"
@@ -51,7 +52,7 @@ func (e *HotEntry) EpochsContext(context.Context) (*common.EpochsContext, error)
 
 func (e *HotEntry) State(context.Context) (common.BeaconState, error) {
 	// Return a copy of the view, the state itself may not be modified
-	return e.state.Copy()
+	return e.state.CopyState()
 }
 
 type HotChain interface {
@@ -386,6 +387,14 @@ func (uc *UnfinalizedChain) Towards(ctx context.Context, fromBlockRoot Root, toS
 				return nil, err
 			}
 		}
+
+		// Check for state upgrades
+		upgradeable := beacon.StandardUpgradeableBeaconState{BeaconState: state}
+		if err := upgradeable.UpgradeMaybe(ctx, uc.Spec, epc); err != nil {
+			return nil, fmt.Errorf("failed BeaconState upgrade-check/process: %v", err)
+		}
+		state = upgradeable.BeaconState
+
 		justified, finalized, err := stateJustFin(state)
 		if err != nil {
 			return nil, err
@@ -417,7 +426,7 @@ func (uc *UnfinalizedChain) Towards(ctx context.Context, fromBlockRoot Root, toS
 		uc.State2Key[stateRoot] = key
 		last = entry
 
-		state, err = state.Copy()
+		state, err = state.CopyState()
 		if err != nil {
 			return nil, err
 		}
