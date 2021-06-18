@@ -4,10 +4,10 @@ import (
 	"context"
 	"sort"
 
-	"github.com/zilm13/zrnt/eth2/beacon/common"
 	"github.com/protolambda/ztyp/codec"
 	"github.com/protolambda/ztyp/tree"
 	. "github.com/protolambda/ztyp/view"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
 )
 
 type RegistryIndices []common.ValidatorIndex
@@ -259,4 +259,77 @@ func ProcessEpochRegistryUpdates(ctx context.Context, spec *common.Spec, epc *co
 		}
 	}
 	return nil
+}
+
+type WithdrawalRegistry []*Withdrawal
+
+func (a *WithdrawalRegistry) Deserialize(spec *common.Spec, dr *codec.DecodingReader) error {
+	return dr.List(func() codec.Deserializable {
+		i := len(*a)
+		*a = append(*a, &Withdrawal{})
+		return (*a)[i]
+	}, WithdrawalType.TypeByteLength(), spec.WITHDRAWAL_REGISTRY_LIMIT)
+}
+
+func (a WithdrawalRegistry) Serialize(spec *common.Spec, w *codec.EncodingWriter) error {
+	return w.List(func(i uint64) codec.Serializable {
+		return a[i]
+	}, WithdrawalType.TypeByteLength(), uint64(len(a)))
+}
+
+func (a WithdrawalRegistry) ByteLength(spec *common.Spec) (out uint64) {
+	return uint64(len(a)) * WithdrawalType.TypeByteLength()
+}
+
+func (a *WithdrawalRegistry) FixedLength(spec *common.Spec) uint64 {
+	return 0 // it's a list, no fixed length
+}
+
+func (li WithdrawalRegistry) HashTreeRoot(spec *common.Spec, hFn tree.HashFn) common.Root {
+	length := uint64(len(li))
+	return hFn.ComplexListHTR(func(i uint64) tree.HTR {
+		if i < length {
+			return li[i]
+		}
+		return nil
+	}, length, spec.WITHDRAWAL_REGISTRY_LIMIT)
+}
+
+func WithdrawalRegistryType(spec *common.Spec) ListTypeDef {
+	return ComplexListType(WithdrawalType, spec.WITHDRAWAL_REGISTRY_LIMIT)
+}
+
+type WithdrawalRegistryView struct{ *ComplexListView }
+
+func AsWithdrawalRegistry(v View, err error) (*WithdrawalRegistryView, error) {
+	c, err := AsComplexList(v, err)
+	return &WithdrawalRegistryView{c}, nil
+}
+
+func (registry *WithdrawalRegistryView) WithdrawalCount() (uint64, error) {
+	return registry.Length()
+}
+
+func (registry *WithdrawalRegistryView) Withdrawal(index common.ValidatorIndex) (common.Withdrawal, error) {
+	return AsWithdrawal(registry.Get(uint64(index)))
+}
+
+func (registry *WithdrawalRegistryView) Iter() (next func() (val common.Withdrawal, ok bool, err error)) {
+	iter := registry.ReadonlyIter()
+	return func() (val common.Withdrawal, ok bool, err error) {
+		elem, ok, err := iter.Next()
+		if err != nil || !ok {
+			return nil, ok, err
+		}
+		v, err := AsWithdrawal(elem, nil)
+		return v, true, err
+	}
+}
+
+func (registry *WithdrawalRegistryView) IsValidIndex(index common.ValidatorIndex) (valid bool, err error) {
+	count, err := registry.Length()
+	if err != nil {
+		return false, err
+	}
+	return uint64(index) < count, nil
 }

@@ -2,11 +2,11 @@ package merge
 
 import (
 	"bytes"
-	"github.com/zilm13/zrnt/eth2/beacon/common"
-	"github.com/zilm13/zrnt/eth2/beacon/phase0"
 	"github.com/protolambda/ztyp/codec"
 	"github.com/protolambda/ztyp/tree"
 	. "github.com/protolambda/ztyp/view"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
+	"github.com/zilm13/zrnt/eth2/beacon/phase0"
 )
 
 type BeaconState struct {
@@ -40,7 +40,7 @@ type BeaconState struct {
 	// Execution-layer
 	LatestExecutionPayloadHeader common.ExecutionPayloadHeader `json:"latest_execution_payload_header" yaml:"latest_execution_payload_header"`
 	// Withdrawals
-	Withdrawals WithdrawalRegistry `json:"withdrawals" yaml:"withdrawals"`
+	Withdrawals phase0.WithdrawalRegistry `json:"withdrawals" yaml:"withdrawals"`
 }
 
 func (v *BeaconState) Deserialize(spec *common.Spec, dr *codec.DecodingReader) error {
@@ -54,7 +54,7 @@ func (v *BeaconState) Deserialize(spec *common.Spec, dr *codec.DecodingReader) e
 		&v.JustificationBits,
 		&v.PreviousJustifiedCheckpoint, &v.CurrentJustifiedCheckpoint,
 		&v.FinalizedCheckpoint,
-		&v.LatestExecutionPayloadHeader, &v.Withdrawals)
+		&v.LatestExecutionPayloadHeader, spec.Wrap(&v.Withdrawals))
 }
 
 func (v *BeaconState) Serialize(spec *common.Spec, w *codec.EncodingWriter) error {
@@ -68,7 +68,7 @@ func (v *BeaconState) Serialize(spec *common.Spec, w *codec.EncodingWriter) erro
 		&v.JustificationBits,
 		&v.PreviousJustifiedCheckpoint, &v.CurrentJustifiedCheckpoint,
 		&v.FinalizedCheckpoint,
-		&v.LatestExecutionPayloadHeader, v.Withdrawals)
+		&v.LatestExecutionPayloadHeader, spec.Wrap(&v.Withdrawals))
 }
 
 func (v *BeaconState) ByteLength(spec *common.Spec) uint64 {
@@ -82,7 +82,7 @@ func (v *BeaconState) ByteLength(spec *common.Spec) uint64 {
 		&v.JustificationBits,
 		&v.PreviousJustifiedCheckpoint, &v.CurrentJustifiedCheckpoint,
 		&v.FinalizedCheckpoint,
-		&v.LatestExecutionPayloadHeader, &v.Withdrawals)
+		&v.LatestExecutionPayloadHeader, spec.Wrap(&v.Withdrawals))
 }
 
 func (*BeaconState) FixedLength(*common.Spec) uint64 {
@@ -100,7 +100,7 @@ func (v *BeaconState) HashTreeRoot(spec *common.Spec, hFn tree.HashFn) common.Ro
 		&v.JustificationBits,
 		&v.PreviousJustifiedCheckpoint, &v.CurrentJustifiedCheckpoint,
 		&v.FinalizedCheckpoint,
-		&v.LatestExecutionPayloadHeader, &v.Withdrawals)
+		&v.LatestExecutionPayloadHeader, spec.Wrap(&v.Withdrawals))
 }
 
 // Hack to make state fields consistent and verifiable without using many hardcoded indices
@@ -165,7 +165,7 @@ func BeaconStateType(spec *common.Spec) *ContainerTypeDef {
 		// Execution-layer
 		{"latest_execution_payload_header", common.ExecutionPayloadHeaderType},
 		// Registry
-		{"withdrawals", WithdrawalRegistryType(spec)},
+		{"withdrawals", phase0.WithdrawalRegistryType(spec)},
 	})
 }
 
@@ -415,10 +415,6 @@ func (state *BeaconStateView) SetLatestExecutionPayloadHeader(h *common.Executio
 	return state.Set(_latestExecutionPayloadHeader, h.View())
 }
 
-func (state *BeaconStateView) Withdrawals() (*WithdrawalRegistryView, error) {
-	return AsWithdrawalRegistry(state.Get(_stateWithdrawals))
-}
-
 func (state *BeaconStateView) ForkSettings(spec *common.Spec) *common.ForkSettings {
 	return &common.ForkSettings{
 		MinSlashingPenaltyQuotient:     spec.MIN_SLASHING_PENALTY_QUOTIENT,
@@ -427,6 +423,10 @@ func (state *BeaconStateView) ForkSettings(spec *common.Spec) *common.ForkSettin
 			return whistleblowerReward / common.Gwei(spec.PROPOSER_REWARD_QUOTIENT)
 		},
 	}
+}
+
+func (state *BeaconStateView) Withdrawals() (common.WithdrawalRegistry, error) {
+	return phase0.AsWithdrawalRegistry(state.Get(_stateWithdrawals))
 }
 
 // Raw converts the tree-structured state into a flattened native Go structure.

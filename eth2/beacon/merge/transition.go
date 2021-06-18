@@ -3,9 +3,9 @@ package merge
 import (
 	"context"
 	"fmt"
+	"github.com/protolambda/ztyp/tree"
 	"github.com/zilm13/zrnt/eth2/beacon/common"
 	"github.com/zilm13/zrnt/eth2/beacon/phase0"
-	"github.com/protolambda/ztyp/tree"
 )
 
 func (state *BeaconStateView) ProcessEpoch(ctx context.Context, spec *common.Spec, epc *common.EpochsContext) error {
@@ -125,6 +125,7 @@ type ExecutionTrackingBeaconState interface {
 
 	LatestExecutionPayloadHeader() (*common.ExecutionPayloadHeaderView, error)
 	SetLatestExecutionPayloadHeader(h *common.ExecutionPayloadHeader) error
+	Withdrawals() (common.WithdrawalRegistry, error)
 }
 
 func (state *BeaconStateView) IsExecutionEnabled(spec *common.Spec, block *BeaconBlock) (bool, error) {

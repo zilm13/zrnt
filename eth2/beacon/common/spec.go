@@ -98,6 +98,7 @@ type AltairPreset struct {
 }
 
 type MergePreset struct {
+	WITHDRAWAL_REGISTRY_LIMIT uint64 `yaml:"WITHDRAWAL_REGISTRY_LIMIT" json:"WITHDRAWAL_REGISTRY_LIMIT"`
 }
 
 type ShardingPreset struct {

@@ -48,7 +48,9 @@ var Mainnet = &common.Spec{
 		EPOCHS_PER_SYNC_COMMITTEE_PERIOD:        256,
 		MIN_SYNC_COMMITTEE_PARTICIPANTS:         1,
 	},
-	MergePreset: common.MergePreset{},
+	MergePreset: common.MergePreset{
+		WITHDRAWAL_REGISTRY_LIMIT: 1099511627776,
+	},
 	ShardingPreset: common.ShardingPreset{
 		MAX_SHARDS:                      1024,
 		INITIAL_ACTIVE_SHARDS:           64,

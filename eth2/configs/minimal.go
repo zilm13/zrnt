@@ -48,7 +48,9 @@ var Minimal = &common.Spec{
 		EPOCHS_PER_SYNC_COMMITTEE_PERIOD:        8,
 		MIN_SYNC_COMMITTEE_PARTICIPANTS:         1,
 	},
-	MergePreset: common.MergePreset{},
+	MergePreset: common.MergePreset{
+		WITHDRAWAL_REGISTRY_LIMIT: 1099511627776,
+	},
 	ShardingPreset: common.ShardingPreset{
 		MAX_SHARDS:                      8,
 		INITIAL_ACTIVE_SHARDS:           2,

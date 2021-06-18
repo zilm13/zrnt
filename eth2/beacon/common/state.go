@@ -150,3 +150,18 @@ type SyncCommitteeBeaconState interface {
 	NextSyncCommittee() (*SyncCommitteeView, error)
 	RotateSyncCommittee(next *SyncCommitteeView) error
 }
+
+type Withdrawal interface {
+	ValidatorIndex() (ValidatorIndex, error)
+	WithdrawalCredentials() (out Root, err error)
+	WithdrawnEpoch() (Epoch, error)
+	Amount() (Gwei, error)
+}
+
+type WithdrawalRegistry interface {
+	WithdrawalCount() (uint64, error)
+	Withdrawal(index ValidatorIndex) (Withdrawal, error)
+	Iter() (next func() (val Withdrawal, ok bool, err error))
+	IsValidIndex(index ValidatorIndex) (valid bool, err error)
+	HashTreeRoot(fn tree.HashFn) Root
+}
