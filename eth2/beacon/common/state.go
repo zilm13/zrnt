@@ -38,6 +38,8 @@ type Validator interface {
 	SetExitEpoch(ep Epoch) error
 	WithdrawableEpoch() (Epoch, error)
 	SetWithdrawableEpoch(epoch Epoch) error
+	WithdrawnEpoch() (Epoch, error)
+	SetWithdrawnEpoch(epoch Epoch) error
 	// Flatten the validator data into destination struct
 	// For intensive validator registry work, it is more efficient to iterate the registry once,
 	// unpack validators into a flat structure, and work with the flattened data.

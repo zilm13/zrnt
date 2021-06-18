@@ -311,6 +311,7 @@ func (state *BeaconStateView) AddValidator(spec *common.Spec, pub common.BLSPubk
 		ActivationEpoch:            common.FAR_FUTURE_EPOCH,
 		ExitEpoch:                  common.FAR_FUTURE_EPOCH,
 		WithdrawableEpoch:          common.FAR_FUTURE_EPOCH,
+		WithdrawnEpoch:             0,
 		EffectiveBalance:           effBalance,
 	}
 	validators, err := phase0.AsValidatorsRegistry(state.Get(_stateValidators))

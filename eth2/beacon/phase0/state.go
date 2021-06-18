@@ -2,10 +2,10 @@ package phase0
 
 import (
 	"bytes"
-	"github.com/zilm13/zrnt/eth2/beacon/common"
 	"github.com/protolambda/ztyp/codec"
 	"github.com/protolambda/ztyp/tree"
 	. "github.com/protolambda/ztyp/view"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
 )
 
 type BeaconState struct {
@@ -285,6 +285,7 @@ func (state *BeaconStateView) AddValidator(spec *common.Spec, pub common.BLSPubk
 		ActivationEpoch:            common.FAR_FUTURE_EPOCH,
 		ExitEpoch:                  common.FAR_FUTURE_EPOCH,
 		WithdrawableEpoch:          common.FAR_FUTURE_EPOCH,
+		WithdrawnEpoch:             0,
 		EffectiveBalance:           effBalance,
 	}
 	validators, err := AsValidatorsRegistry(state.Get(_stateValidators))
