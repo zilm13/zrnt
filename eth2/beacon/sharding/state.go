@@ -2,11 +2,11 @@ package sharding
 
 import (
 	"bytes"
-	"github.com/zilm13/zrnt/eth2/beacon/common"
-	"github.com/zilm13/zrnt/eth2/beacon/phase0"
 	"github.com/protolambda/ztyp/codec"
 	"github.com/protolambda/ztyp/tree"
 	. "github.com/protolambda/ztyp/view"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
+	"github.com/zilm13/zrnt/eth2/beacon/phase0"
 )
 
 type BeaconState struct {
@@ -142,6 +142,7 @@ const (
 	_stateCurrentJustifiedCheckpoint
 	_stateFinalizedCheckpoint
 	_latestExecutionPayloadHeader
+	_stateWithdrawals
 	_shardBuffer
 	_shardGasprice
 	_currentEpochStartShard
@@ -431,6 +432,10 @@ func (state *BeaconStateView) LatestExecutionPayloadHeader() (*common.ExecutionP
 
 func (state *BeaconStateView) SetLatestExecutionPayloadHeader(h *common.ExecutionPayloadHeader) error {
 	return state.Set(_latestExecutionPayloadHeader, h.View())
+}
+
+func (state *BeaconStateView) Withdrawals() (common.WithdrawalRegistry, error) {
+	return phase0.AsWithdrawalRegistry(state.Get(_stateWithdrawals))
 }
 
 func (state *BeaconStateView) ShardBuffer() (*ShardBufferView, error) {
