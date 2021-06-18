@@ -1,4 +1,4 @@
-module github.com/protolambda/zrnt
+module github.com/zilm13/zrnt
 
 go 1.14
 
