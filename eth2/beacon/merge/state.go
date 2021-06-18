@@ -39,6 +39,8 @@ type BeaconState struct {
 	FinalizedCheckpoint         common.Checkpoint        `json:"finalized_checkpoint" yaml:"finalized_checkpoint"`
 	// Execution-layer
 	LatestExecutionPayloadHeader ExecutionPayloadHeader `json:"latest_execution_payload_header" yaml:"latest_execution_payload_header"`
+	// Withdrawals
+	Withdrawals WithdrawalRegistry `json:"withdrawals" yaml:"withdrawals"`
 }
 
 func (v *BeaconState) Deserialize(spec *common.Spec, dr *codec.DecodingReader) error {
@@ -52,7 +54,7 @@ func (v *BeaconState) Deserialize(spec *common.Spec, dr *codec.DecodingReader) e
 		&v.JustificationBits,
 		&v.PreviousJustifiedCheckpoint, &v.CurrentJustifiedCheckpoint,
 		&v.FinalizedCheckpoint,
-		&v.LatestExecutionPayloadHeader)
+		&v.LatestExecutionPayloadHeader, &v.Withdrawals)
 }
 
 func (v *BeaconState) Serialize(spec *common.Spec, w *codec.EncodingWriter) error {
@@ -66,7 +68,7 @@ func (v *BeaconState) Serialize(spec *common.Spec, w *codec.EncodingWriter) erro
 		&v.JustificationBits,
 		&v.PreviousJustifiedCheckpoint, &v.CurrentJustifiedCheckpoint,
 		&v.FinalizedCheckpoint,
-		&v.LatestExecutionPayloadHeader)
+		&v.LatestExecutionPayloadHeader, v.Withdrawals)
 }
 
 func (v *BeaconState) ByteLength(spec *common.Spec) uint64 {
@@ -80,7 +82,7 @@ func (v *BeaconState) ByteLength(spec *common.Spec) uint64 {
 		&v.JustificationBits,
 		&v.PreviousJustifiedCheckpoint, &v.CurrentJustifiedCheckpoint,
 		&v.FinalizedCheckpoint,
-		&v.LatestExecutionPayloadHeader)
+		&v.LatestExecutionPayloadHeader, &v.Withdrawals)
 }
 
 func (*BeaconState) FixedLength(*common.Spec) uint64 {
@@ -98,7 +100,7 @@ func (v *BeaconState) HashTreeRoot(spec *common.Spec, hFn tree.HashFn) common.Ro
 		&v.JustificationBits,
 		&v.PreviousJustifiedCheckpoint, &v.CurrentJustifiedCheckpoint,
 		&v.FinalizedCheckpoint,
-		&v.LatestExecutionPayloadHeader)
+		&v.LatestExecutionPayloadHeader, &v.Withdrawals)
 }
 
 // Hack to make state fields consistent and verifiable without using many hardcoded indices
@@ -126,6 +128,7 @@ const (
 	_stateCurrentJustifiedCheckpoint
 	_stateFinalizedCheckpoint
 	_latestExecutionPayloadHeader
+	_stateWithdrawals
 )
 
 func BeaconStateType(spec *common.Spec) *ContainerTypeDef {
@@ -161,6 +164,8 @@ func BeaconStateType(spec *common.Spec) *ContainerTypeDef {
 		{"finalized_checkpoint", common.CheckpointType},
 		// Execution-layer
 		{"latest_execution_payload_header", ExecutionPayloadHeaderType},
+		// Registry
+		{"withdrawals", WithdrawalRegistryType(spec)},
 	})
 }
 
@@ -412,6 +417,10 @@ func (state *BeaconStateView) LatestExecutionPayloadHeader() (*ExecutionPayloadH
 
 func (state *BeaconStateView) SetLatestExecutionPayloadHeader(h *ExecutionPayloadHeader) error {
 	return state.Set(_latestExecutionPayloadHeader, h.View())
+}
+
+func (state *BeaconStateView) Withdrawals() (*WithdrawalRegistryView, error) {
+	return AsWithdrawalRegistry(state.Get(_stateWithdrawals))
 }
 
 func (state *BeaconStateView) ForkSettings(spec *common.Spec) *common.ForkSettings {
