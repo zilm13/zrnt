@@ -2,7 +2,7 @@ package phase0
 
 import (
 	"encoding/json"
-	"github.com/protolambda/zrnt/eth2/configs"
+	"github.com/zilm13/zrnt/eth2/configs"
 	"gopkg.in/yaml.v3"
 	"testing"
 )

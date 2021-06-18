@@ -2,7 +2,7 @@ package sharding
 
 import (
 	"context"
-	"github.com/protolambda/zrnt/eth2/beacon/common"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
 )
 
 func ProcessShardEpochIncrement(ctx context.Context, spec *common.Spec, epc *common.EpochsContext, state *BeaconStateView) error {
