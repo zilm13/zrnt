@@ -2,9 +2,9 @@ package benches
 
 import (
 	"encoding/binary"
-	"github.com/protolambda/zrnt/eth2/beacon/common"
-	"github.com/protolambda/zrnt/eth2/beacon/phase0"
-	"github.com/protolambda/zrnt/eth2/configs"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
+	"github.com/zilm13/zrnt/eth2/beacon/phase0"
+	"github.com/zilm13/zrnt/eth2/configs"
 )
 
 func CreateTestValidators(count uint64, balance common.Gwei) []phase0.KickstartValidatorData {

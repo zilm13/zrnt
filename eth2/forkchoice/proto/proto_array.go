@@ -5,8 +5,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/protolambda/zrnt/eth2/beacon/common"
-	. "github.com/protolambda/zrnt/eth2/forkchoice"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
+	. "github.com/zilm13/zrnt/eth2/forkchoice"
 )
 
 const NONE = ^NodeIndex(0)

@@ -2,7 +2,7 @@ package common
 
 import (
 	"encoding/binary"
-	. "github.com/protolambda/zrnt/eth2/util/hashing"
+	. "github.com/zilm13/zrnt/eth2/util/hashing"
 )
 
 const hSeedSize = int8(32)

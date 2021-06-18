@@ -3,7 +3,7 @@ package phase0
 import (
 	"context"
 	"fmt"
-	"github.com/protolambda/zrnt/eth2/beacon/common"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
 )
 
 func (state *BeaconStateView) ProcessEpoch(ctx context.Context, spec *common.Spec, epc *common.EpochsContext) error {

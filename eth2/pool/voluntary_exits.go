@@ -2,7 +2,7 @@ package pool
 
 import (
 	"github.com/zilm13/zrnt/eth2/beacon/common"
-	"github.com/protolambda/zrnt/eth2/beacon/phase0"
+	"github.com/zilm13/zrnt/eth2/beacon/phase0"
 	"sync"
 )
 

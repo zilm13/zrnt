@@ -2,7 +2,7 @@ package common
 
 import (
 	"encoding/binary"
-	. "github.com/protolambda/zrnt/eth2/util/hashing"
+	. "github.com/zilm13/zrnt/eth2/util/hashing"
 )
 
 // Prepare the randao mix for the given epoch by copying over the mix from the previous epoch.

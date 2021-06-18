@@ -1,7 +1,7 @@
 package configs
 
 import (
-	"github.com/protolambda/zrnt/eth2/beacon/common"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
 )
 
 var Mainnet = &common.Spec{

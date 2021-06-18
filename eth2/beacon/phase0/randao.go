@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/protolambda/zrnt/eth2/beacon/common"
-	"github.com/protolambda/zrnt/eth2/util/bls"
-	. "github.com/protolambda/zrnt/eth2/util/hashing"
+	"github.com/zilm13/zrnt/eth2/beacon/common"
+	"github.com/zilm13/zrnt/eth2/util/bls"
+	. "github.com/zilm13/zrnt/eth2/util/hashing"
 	"github.com/protolambda/ztyp/codec"
 	"github.com/protolambda/ztyp/tree"
 	. "github.com/protolambda/ztyp/view"

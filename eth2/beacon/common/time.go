@@ -2,7 +2,7 @@ package common
 
 import (
 	"errors"
-	"github.com/protolambda/zrnt/eth2/util/math"
+	"github.com/zilm13/zrnt/eth2/util/math"
 	"github.com/protolambda/ztyp/codec"
 	"github.com/protolambda/ztyp/tree"
 	. "github.com/protolambda/ztyp/view"

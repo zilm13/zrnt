@@ -3,7 +3,7 @@ package common
 import (
 	"encoding/binary"
 	"errors"
-	"github.com/protolambda/zrnt/eth2/util/hashing"
+	"github.com/zilm13/zrnt/eth2/util/hashing"
 )
 
 func ComputeSyncCommitteeIndices(spec *Spec, state BeaconState, baseEpoch Epoch, active []ValidatorIndex) ([]ValidatorIndex, error) {

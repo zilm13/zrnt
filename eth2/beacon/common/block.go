@@ -2,7 +2,7 @@ package common
 
 import (
 	"bytes"
-	"github.com/protolambda/zrnt/eth2/util/bls"
+	"github.com/zilm13/zrnt/eth2/util/bls"
 )
 
 type BeaconBlockEnvelope struct {
